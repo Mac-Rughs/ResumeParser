@@ -1,9 +1,9 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:resume_parser/dashboard.dart';
 import 'package:resume_parser/login.dart';
 import 'package:resume_parser/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:resume_parser/profile.dart';
 
 class splash extends StatefulWidget {
   const splash({super.key});
@@ -27,7 +27,7 @@ class _splashState extends State<splash> {
 
     if (id != null && pass != null) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return profile();
+        return dashboard();
       }));
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {

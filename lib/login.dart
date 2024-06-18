@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:resume_parser/dashboard.dart';
-import 'package:resume_parser/profile.dart';
 import 'package:resume_parser/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
