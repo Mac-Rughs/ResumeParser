@@ -1,7 +1,14 @@
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:resume_parser/admin.dart';
 import 'package:resume_parser/dashboard.dart';
+import 'package:resume_parser/database/function.dart';
 import 'package:resume_parser/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'database/model.dart';
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -14,11 +21,42 @@ class _loginState extends State<login> {
   String? passwordError;
   TextEditingController usernamecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+
+
+  Future<void>validate() async
+  {
+    final UserDB = await Hive.openBox<User>("UserDB");
+    for ( var user in UserDB.values)
+      {
+        if(user.username == usernamecontroller.text && user.password == passwordcontroller.text)
+          {
+            Fluttertoast.showToast(msg: ("Welcome"));
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return dashboard(user: user);
+            }));
+          }else
+            {
+              Fluttertoast.showToast(msg: ("Invalid User"));
+            }
+      }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          actions: [
+            IconButton(onPressed: ()
+        {
+        Navigator.push(context,
+        MaterialPageRoute(builder: (context) {
+        return admin();
+        })
+        );},
+                icon: Icon(Icons.account_circle),
+    ),
+          ],
           backgroundColor: Colors.white,
           title: const Text(
             "Welcome Back",
@@ -67,6 +105,7 @@ class _loginState extends State<login> {
                   child: Container(
                     color: Colors.white60,
                     child: TextField(
+                      obscureText: true,
                       controller: passwordcontroller,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -92,10 +131,8 @@ class _loginState extends State<login> {
                 Container(
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return dashboard();
-                        }));
+                        validate();
+
                       },
                       child: const Text(
                         "Login In",

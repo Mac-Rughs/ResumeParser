@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:resume_parser/database/function.dart';
+import 'package:resume_parser/database/model.dart';
 import 'login.dart';
 
 class signup extends StatefulWidget {
@@ -7,10 +9,12 @@ class signup extends StatefulWidget {
   @override
   State<signup> createState() => _signupState();
 }
-
+TextEditingController confirmcontroller = TextEditingController();
+TextEditingController passwordcontroller = TextEditingController();
+TextEditingController usernamecontroller = TextEditingController();
+TextEditingController mailcontroller = TextEditingController();
 class _signupState extends State<signup> {
-  TextEditingController confirmcontroller = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
+
   String? passwordError;
   String? confirmError;
   String password = "";
@@ -21,6 +25,7 @@ class _signupState extends State<signup> {
       if (passwordcontroller.text == confirmcontroller.text) {
         confirmError = null;
         print("Sucess");
+        addUser();
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return login();
         }));
@@ -66,6 +71,7 @@ class _signupState extends State<signup> {
                         Container(
                           color: Colors.white54,
                           child: TextField(
+                            controller: usernamecontroller,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -82,6 +88,7 @@ class _signupState extends State<signup> {
                         Container(
                           color: Colors.white60,
                           child: TextField(
+                            controller: mailcontroller,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -149,4 +156,19 @@ class _signupState extends State<signup> {
           )),
         ));
   }
+}
+Future<void> addUser() async
+{
+  final username = usernamecontroller.text.trim();
+  final mail = mailcontroller.text.trim();
+  final password = passwordcontroller.text.trim();
+
+  if (username.isEmpty || password.isEmpty)
+    {
+      return;
+    }else
+    {
+      var data = User(username: username, password: password,mail: mail);
+      addUserList(data);
+    }
 }

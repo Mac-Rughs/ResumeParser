@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:resume_parser/database/model.dart';
 import 'package:resume_parser/login.dart';
-//import 'package:resume_parser/login.dart';
 import 'package:resume_parser/signup.dart';
 import 'splash.dart';
 
 
 
-void main()
-{
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  if(!Hive.isAdapterRegistered((UserAdapter()).typeId)){
+    Hive.registerAdapter(UserAdapter());
+  }
+
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {
